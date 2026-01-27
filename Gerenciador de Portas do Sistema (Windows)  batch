@@ -1,0 +1,106 @@
+@echo off
+title Gerenciador de Portas do Sistema (Windows)
+color 0A
+
+:: ===== VERIFICAR ADMIN =====
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo.
+    echo Este script precisa ser executado como ADMINISTRADOR.
+    echo Clique com o botao direito e escolha "Executar como administrador".
+    echo.
+    pause
+    exit
+)
+
+:: ===== INICIO =====
+goto menu
+
+:: ===== BANNER (SEM GOTO) =====
+:banner
+cls
+echo.
+echo   /$$$$$$                                          /$$      
+echo  /$$__  $$                                        ^| $$      
+echo ^| $$  \ $$ /$$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ ^| $$   /$$
+echo ^| $$$$$$$$^| $$__  $$ ^|____  $$ /$$__  $$ /$$__  $$^| $$  /$$/
+echo ^| $$__  $$^| $$  \ $$  /$$$$$$$^| $$  \__/^| $$  \ $$^| $$$$$$/ 
+echo ^| $$  ^| $$^| $$  ^| $$ /$$__  $$^| $$      ^| $$  ^| $$^| $$_  $$ 
+echo ^| $$  ^| $$^| $$  ^| $$^|  $$$$$$$^| $$      ^|  $$$$$$/^| $$ \  $$
+echo ^|__/  ^|__/^|__/  ^|__/ \_______/^|__/       \______/ ^|__/  \__/
+echo.
+echo ===============================================================
+echo              Gerenciador de Portas do Sistema (Windows)
+echo                    
+echo ===============================================================
+echo.
+exit /b
+
+:: ===== MENU =====
+:menu
+call :banner
+echo ==============================
+echo  1 - Listar portas abertas
+echo  2 - Bloquear uma porta
+echo  3 - Desbloquear uma porta
+echo  4 - Sair
+echo ==============================
+echo.
+set /p op=Escolha uma opcao: 
+
+if "%op%"=="1" goto listar
+if "%op%"=="2" goto bloquear
+if "%op%"=="3" goto desbloquear
+if "%op%"=="4" exit
+
+goto menu
+
+:: ===== LISTAR =====
+:listar
+call :banner
+echo PORTAS EM ESCUTA (LISTENING):
+echo.
+netstat -ano | findstr LISTENING
+echo.
+pause
+goto menu
+
+:: ===== BLOQUEAR =====
+:bloquear
+call :banner
+set /p porta=Digite a porta para BLOQUEAR: 
+if "%porta%"=="" goto menu
+
+set /p proto=Digite o protocolo (TCP ou UDP): 
+if /I not "%proto%"=="TCP" if /I not "%proto%"=="UDP" (
+    echo.
+    echo Protocolo invalido. Use TCP ou UDP.
+    echo.
+    pause
+    goto menu
+)
+
+:: Remove regra antiga (se existir) para evitar duplicacao
+netsh advfirewall firewall delete rule name="Bloquear Porta %porta%" >nul 2>&1
+
+netsh advfirewall firewall add rule name="Bloquear Porta %porta%" dir=in action=block protocol=%proto% localport=%porta%
+
+echo.
+echo Porta %porta% (%proto%) BLOQUEADA.
+echo.
+pause
+goto menu
+
+:: ===== DESBLOQUEAR =====
+:desbloquear
+call :banner
+set /p porta=Digite a porta para DESBLOQUEAR: 
+if "%porta%"=="" goto menu
+
+netsh advfirewall firewall delete rule name="Bloquear Porta %porta%"
+
+echo.
+echo Porta %porta% DESBLOQUEADA.
+echo.
+pause
+goto menu
