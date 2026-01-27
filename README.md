@@ -1,2 +1,15 @@
-# Gerenciador-de-Portas-do-Sistema-Windows-
-Gerenciador de Portas do Sistema (Windows) é um script em Batch desenvolvido para auxiliar administradores, estudantes e usuários avançados no controle básico de portas TCP e UDP através do Firewall do Windows.
+# Gerenciador de Portas (Batch)
+
+Ferramenta simples em Batch para Windows que permite:
+
+- Listar portas em escuta
+- Bloquear portas via Firewall do Windows
+- Desbloquear portas previamente bloqueadas
+
+## Requisitos
+- Windows 10 ou superior
+- Executar como Administrador
+
+## Aviso
+Ferramenta educacional e administrativa.
+Não substitui firewall corporativo ou soluções de segurança avançadas.
