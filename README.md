@@ -13,3 +13,7 @@ Ferramenta simples em Batch para Windows que permite:
 ## Aviso
 Ferramenta educacional e administrativa.
 Não substitui firewall corporativo ou soluções de segurança avançadas.
+
+
+
+Antes de explorar uma falha, pense em quem está do outro lado.
